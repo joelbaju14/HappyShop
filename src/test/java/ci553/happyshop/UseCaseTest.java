@@ -38,7 +38,10 @@ public class UseCaseTest {
         Trolley trolley = cusModel.getTrolley();
         trolley.addProduct(p);
 
-        assertTrue(trolley.getProducts().contains(p));
+        // Check the product is in the trolley by ID, not by object identity
+        // (OrganizedTrolley stores a copy of the product)
+        assertEquals(1, trolley.getProducts().size());
+        assertEquals("0001", trolley.getProducts().get(0).getProductId());
 
         //mock CustomerView cause checkOut() internally calls updateView() → cusView.update()
         CustomerView mockCusView = mock(CustomerView.class);
