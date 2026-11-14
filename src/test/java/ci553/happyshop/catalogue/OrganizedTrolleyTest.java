@@ -39,4 +39,15 @@ class OrganizedTrolleyTest {
         assertEquals("0002", trolley.getProducts().get(1).getProductId());
         assertEquals("0003", trolley.getProducts().get(2).getProductId());
     }
+    @Test
+    void removeProductDeletesOnlyThatProduct() {
+        OrganizedTrolley trolley = new OrganizedTrolley();
+        trolley.addProduct(new Product("0001", "40 inch TV", "0001.jpg", 269.00, 100));
+        trolley.addProduct(new Product("0002", "DAB Radio", "0002.jpg", 29.99, 100));
+
+        trolley.removeProduct("0001");
+
+        assertEquals(1, trolley.getProducts().size());
+        assertEquals("0002", trolley.getProducts().get(0).getProductId());
+    }
 }
