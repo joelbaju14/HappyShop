@@ -19,11 +19,12 @@ import java.util.Map;
 // indicating possible extension ideas to explore.
 public class CustomerModel {
     public CustomerView cusView; //part of MVC
+    public RemoveProductNotifier removeProductNotifier; // shows a pop-up when items are removed at checkout
     private DatabaseRW databaseRW; //Interface type, not specific implementation
                                   //Benefits: Flexibility: Easily change the database implementation.
 
     private Product searchResult =null; // product found from search
-    private Trolley trolley =  new OrganizedTrolley(); // holds the products currently in the customer's trolley
+    private OrganizedTrolley trolley =  new OrganizedTrolley(); // holds the products currently in the customer's trolley
 
     // Data passed to CustomerView for UI updates (including search, trolley and receipt page)
     private String searchResultImageName = "imageHolder.jpg";
@@ -106,6 +107,9 @@ public class CustomerModel {
                 OrderHub orderHub =OrderHub.getOrderHub();
                 Order theOrder = orderHub.newOrder(trolley.getProducts());
                 trolley.clear();
+                if (removeProductNotifier != null) {
+                    removeProductNotifier.closeNotifierWindow();
+                }
                 trolleyContentsText ="";
                 searchResult = null;
                 searchResultProductText ="Thank you for shopping with us.";
@@ -127,13 +131,18 @@ public class CustomerModel {
                 }
                 searchResult =null;
 
-                //TODO
-                // Add the following logic here:
-                // 1. Remove products with insufficient stock from the trolley.
-                // 2. Trigger a message window to notify the customer about the insufficient stock, rather than directly changing displayLaSearchResult.
-                //You can use the provided RemoveProductNotifier class and its showRemovalMsg method for this purpose.
-                //remember close the message window where appropriate (using method closeNotifierWindow() of RemoveProductNotifier class)
-                searchResultProductText = "Checkout failed due to insufficient stock for the following products:\n" + errorMsg.toString();
+                // 1. Remove products with insufficient stock from the trolley
+                for (Product p : insufficientProducts) {
+                    trolley.removeProduct(p.getProductId());
+                }
+                trolleyContentsText = ProductListFormatter.buildString(trolley.getProducts());
+
+                // 2. Show a pop-up instead of changing the search text
+                //    (only if a notifier exists, so tests without a UI don't crash)
+                if (removeProductNotifier != null) {
+                    removeProductNotifier.showRemovalMsg(errorMsg.toString());
+                }
+                searchResultProductText = "Some items were removed from your trolley.";
                 System.out.println("stock is not enough");
             }
         }
@@ -166,6 +175,9 @@ public class CustomerModel {
 
     void cancel(){
         trolley.clear();
+        if (removeProductNotifier != null) {
+            removeProductNotifier.closeNotifierWindow();
+        }
         trolleyContentsText ="";
         updateView();
     }

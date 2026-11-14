@@ -97,9 +97,9 @@ public class Main extends Application {
 
         // Optional feature: Handling Stock Shortages at Checkout.
         // Code is commented out for now; students may explore this as an extension.
-        //RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
-        //removeProductNotifier.cusView = cusView;
-        //cusModel.removeProductNotifier = removeProductNotifier;
+        RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
+        removeProductNotifier.cusView = cusView;
+        cusModel.removeProductNotifier = removeProductNotifier;
     }
 
     /** The picker GUI, - for staff to pack customer's order,

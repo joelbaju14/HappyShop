@@ -19,16 +19,19 @@ public class OrganizedTrolley extends Trolley {
 
         // 2. No match found: add it as a new line
         // Add a copy, so the trolley's product is a separate object from searchResult
-        Product copy = new Product(
-                product.getProductId(),
-                product.getProductDescription(),
-                product.getProductImageName(),
-                product.getUnitPrice(),
-                product.getOrderedQuantity(),
-                product.getStockQuantity());
+        Product copy = new Product(product.getProductId(), product.getProductDescription(), product.getProductImageName(), product.getUnitPrice(), product.getOrderedQuantity(), product.getStockQuantity());
         super.addProduct(copy);
 
         // 3. Keep the trolley sorted by product ID
         Collections.sort(getProducts());
+    }
+
+    /**
+     * Removes the product with the given ID from the trolley.
+     *
+     * @param productId the ID of the product to remove, e.g. "0001"
+     */
+    public void removeProduct(String productId) {
+        getProducts().removeIf(p -> p.getProductId().equals(productId));
     }
 }
