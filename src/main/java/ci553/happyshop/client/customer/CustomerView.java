@@ -42,7 +42,7 @@ public class CustomerView  {
     //four UI controls needs updating when program going on
     private ImageView ivProduct; //image area in searchPage
     private Label lbProductText;//product text info in searchPage
-    private TextArea taTrolley; //in trolley Page
+    private ListView<String> lvTrolley; // trolley lines; the customer can click one to select it
     private TextArea taReceipt;//in receipt page
 
     // Holds a reference to this CustomerView window for future access and management
@@ -127,9 +127,9 @@ public class CustomerView  {
         Label laPageTitle = new Label("🛒🛒  Trolley 🛒🛒");
         laPageTitle.setStyle(UIStyle.labelTitleStyle);
 
-        taTrolley = new TextArea();
-        taTrolley.setEditable(false);
-        taTrolley.setPrefSize(WIDTH/2, HEIGHT-50);
+        lvTrolley = new ListView<>();
+        lvTrolley.setPrefSize(WIDTH/2, HEIGHT-50);
+
 
         Button btnCancel = new Button("Cancel");
         btnCancel.setOnAction(this::buttonClicked);
@@ -139,11 +139,15 @@ public class CustomerView  {
         btnCheckout.setOnAction(this::buttonClicked);
         btnCheckout.setStyle(UIStyle.buttonStyle);
 
-        HBox hbBtns = new HBox(10, btnCancel,btnCheckout);
-        hbBtns.setStyle("-fx-padding: 15px;");
+        Button btnRemove = new Button("Remove");
+        btnRemove.setOnAction(this::buttonClicked);
+        btnRemove.setStyle(UIStyle.buttonStyle);
+
+        HBox hbBtns = new HBox(5, btnRemove, btnCancel, btnCheckout);   // less space between buttons
+        hbBtns.setStyle("-fx-padding: 15px 0px;");                       // padding top/bottom only, not the sides
         hbBtns.setAlignment(Pos.CENTER);
 
-        vbTrolleyPage = new VBox(15, laPageTitle, taTrolley, hbBtns);
+        vbTrolleyPage = new VBox(15, laPageTitle, lvTrolley, hbBtns);
         vbTrolleyPage.setPrefWidth(COLUMN_WIDTH);
         vbTrolleyPage.setAlignment(Pos.TOP_CENTER);
         vbTrolleyPage.setStyle("-fx-padding: 15px;");
@@ -179,6 +183,10 @@ public class CustomerView  {
         }
         if(action.equals("OK & Close")){
             showTrolleyOrReceiptPage(vbTrolleyPage);
+        }         if (action.equals("Remove")) {
+            // pass the selected row number (-1 if nothing is selected)
+            cusController.doRemove(lvTrolley.getSelectionModel().getSelectedIndex());
+            return; // handled here, so doAction() isn't called as well
         }
         cusController.doAction(action);
     }
@@ -187,7 +195,7 @@ public class CustomerView  {
     public void update(String productImageName, String productTextInfo, String trolley, String receipt) {
         ivProduct.setImage(new Image(productImageName));
         lbProductText.setText(productTextInfo);
-        taTrolley.setText(trolley);
+        lvTrolley.getItems().setAll(trolley.split("\n")); // one list row per line of the trolley text
         if (!receipt.equals("")) {
             showTrolleyOrReceiptPage(vbReceiptPage);
             taReceipt.setText(receipt);

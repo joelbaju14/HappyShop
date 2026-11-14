@@ -172,7 +172,23 @@ public class CustomerModel {
         }
         return new ArrayList<>(grouped.values());
     }
-
+    /**
+     * Removes the trolley line the customer selected in the list.
+     * @param index the position of the selected row (0 = first product);
+     *              -1 means nothing is selected
+     */
+    void removeFromTrolley(int index) {
+        if (index >= 0 && index < trolley.getProducts().size()) {
+            String productId = trolley.getProducts().get(index).getProductId();
+            trolley.removeProduct(productId);
+            trolleyContentsText = trolley.getProducts().isEmpty()
+                    ? ""
+                    : ProductListFormatter.buildString(trolley.getProducts());
+        } else {
+            searchResultProductText = "Please click a product in your trolley first.";
+        }
+        updateView();
+    }
     void cancel(){
         trolley.clear();
         if (removeProductNotifier != null) {

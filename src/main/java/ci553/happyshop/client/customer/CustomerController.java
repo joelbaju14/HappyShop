@@ -22,5 +22,12 @@ public class CustomerController {
                 break;
         }
     }
+    /**
+     * Passes the customer's selected trolley row to the model to remove it.
+     * @param selectedIndex the row the customer clicked, or -1 if none
+     */
+    public void doRemove(int selectedIndex) {
+        cusModel.removeFromTrolley(selectedIndex);
+    }
 
 }
