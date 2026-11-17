@@ -11,8 +11,8 @@ public class Trolley {
      * Currently the product is simply appended to the end of the list.
      *
      * TODO — Improve trolley organisation:
-     * 1. Merge products with the same product ID (combine quantities).
-     * 2. Sorts the products in the trolley by product ID.
+     * Done in OrganizedTrolley (Approach 3), which extends this class.
+     * The original notes on the possible approaches are kept below:
      *
      * Possible approaches:
      *
