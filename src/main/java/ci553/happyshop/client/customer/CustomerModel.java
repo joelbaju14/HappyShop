@@ -144,7 +144,9 @@ public class CustomerModel {
                 for (Product p : insufficientProducts) {
                     trolley.removeProduct(p.getProductId());
                 }
-                trolleyContentsText = ProductListFormatter.buildString(trolley.getProducts());
+                trolleyContentsText = trolley.getProducts().isEmpty()
+                        ? ""
+                        : ProductListFormatter.buildString(trolley.getProducts());
 
                 // 2. Show a pop-up instead of changing the search text
                 //    (only if a notifier exists, so tests without a UI don't crash)
