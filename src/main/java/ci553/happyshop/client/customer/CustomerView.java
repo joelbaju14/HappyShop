@@ -17,13 +17,13 @@ import javafx.stage.Stage;
 
 /**
  * The CustomerView is separated into two sections by a line :
- *
+ * <p>
  * 1. Search Page – Always visible, allowing customers to browse and search for products.
  * 2. the second page – display either the Trolley Page or the Receipt Page
- *    depending on the current context. Only one of these is shown at a time.
+ * depending on the current context. Only one of these is shown at a time.
  */
 
-public class CustomerView  {
+public class CustomerView {
     public CustomerController cusController;
 
     private final int WIDTH = UIStyle.customerWinWidth;
@@ -36,8 +36,8 @@ public class CustomerView  {
 
     TextField tfId; //for user input on the search page. Made accessible so it can be accessed or modified by CustomerModel
     TextField tfKeyword; // part of the product description
-                         // for user input on the search page.
-                         // Optional extension: made accessible so it can be accessed by CustomerModel
+    // for user input on the search page.
+    // Optional extension: made accessible so it can be accessed by CustomerModel
 
     //four UI controls needs updating when program going on
     private ImageView ivProduct; //image area in searchPage
@@ -69,9 +69,9 @@ public class CustomerView  {
         Scene scene = new Scene(hbRoot, WIDTH, HEIGHT);
         window.setScene(scene);
         window.setTitle("🛒 HappyShop Standard Customer Client");
-        WinPosManager.registerWindow(window,WIDTH,HEIGHT); //calculate position x and y for this window
+        WinPosManager.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
         window.show();
-        viewWindow=window;// Sets viewWindow to this window for future reference and management.
+        viewWindow = window;// Sets viewWindow to this window for future reference and management.
     }
 
     private VBox createSearchPage() {
@@ -93,14 +93,14 @@ public class CustomerView  {
         tfKeyword.setStyle(UIStyle.customerTextFieldStyle);
         HBox hbName = new HBox(10, laKeyword, tfKeyword);
 
-        Label laPlaceHolder = new Label(  " ".repeat(15)); //create left-side spacing so that this HBox aligns with others in the layout.
+        Label laPlaceHolder = new Label(" ".repeat(15)); //create left-side spacing so that this HBox aligns with others in the layout.
         Button btnSearch = new Button("Search");
         btnSearch.setStyle(UIStyle.buttonStyle);
         btnSearch.setOnAction(this::buttonClicked);
         Button btnAddToTrolley = new Button("Add to Trolley");
         btnAddToTrolley.setStyle(UIStyle.buttonStyle);
         btnAddToTrolley.setOnAction(this::buttonClicked);
-        HBox hbBtns = new HBox(10, laPlaceHolder,btnSearch, btnAddToTrolley);
+        HBox hbBtns = new HBox(10, laPlaceHolder, btnSearch, btnAddToTrolley);
 
         ivProduct = new ImageView("imageHolder.jpg");
         ivProduct.setFitHeight(60);
@@ -128,7 +128,7 @@ public class CustomerView  {
         laPageTitle.setStyle(UIStyle.labelTitleStyle);
 
         lvTrolley = new ListView<>();
-        lvTrolley.setPrefSize(WIDTH/2, HEIGHT-50);
+        lvTrolley.setPrefSize(WIDTH / 2, HEIGHT - 50);
 
 
         Button btnCancel = new Button("Cancel");
@@ -147,7 +147,19 @@ public class CustomerView  {
         hbBtns.setStyle("-fx-padding: 15px 0px;");                       // padding top/bottom only, not the sides
         hbBtns.setAlignment(Pos.CENTER);
 
-        vbTrolleyPage = new VBox(15, laPageTitle, lvTrolley, hbBtns);
+        Button btnPlus = new Button("+");
+        btnPlus.setOnAction(this::buttonClicked);
+        btnPlus.setStyle(UIStyle.buttonStyle);
+
+        Button btnMinus = new Button("-");
+        btnMinus.setOnAction(this::buttonClicked);
+        btnMinus.setStyle(UIStyle.buttonStyle);
+
+        Label laQuantity = new Label("Quantity:");
+        HBox hbQuantity = new HBox(10, laQuantity, btnMinus, btnPlus);
+        hbQuantity.setAlignment(Pos.CENTER);
+
+        vbTrolleyPage = new VBox(15, laPageTitle, lvTrolley, hbQuantity, hbBtns);
         vbTrolleyPage.setPrefWidth(COLUMN_WIDTH);
         vbTrolleyPage.setAlignment(Pos.TOP_CENTER);
         vbTrolleyPage.setStyle("-fx-padding: 15px;");
@@ -160,7 +172,7 @@ public class CustomerView  {
 
         taReceipt = new TextArea();
         taReceipt.setEditable(false);
-        taReceipt.setPrefSize(WIDTH/2, HEIGHT-50);
+        taReceipt.setPrefSize(WIDTH / 2, HEIGHT - 50);
 
         Button btnCloseReceipt = new Button("OK & Close"); //btn for closing receipt and showing trolley page
         btnCloseReceipt.setStyle(UIStyle.buttonStyle);
@@ -176,17 +188,28 @@ public class CustomerView  {
 
 
     private void buttonClicked(ActionEvent event) {
-        Button btn = (Button)event.getSource();
+        Button btn = (Button) event.getSource();
         String action = btn.getText();
-        if(action.equals("Add to Trolley")){
+        if (action.equals("Add to Trolley")) {
             showTrolleyOrReceiptPage(vbTrolleyPage); //ensure trolleyPage shows if the last customer did not close their receiptPage
         }
-        if(action.equals("OK & Close")){
+        if (action.equals("OK & Close")) {
             showTrolleyOrReceiptPage(vbTrolleyPage);
-        }         if (action.equals("Remove")) {
+        }
+        if (action.equals("Remove")) {
             // pass the selected row number (-1 if nothing is selected)
             cusController.doRemove(lvTrolley.getSelectionModel().getSelectedIndex());
             return; // handled here, so doAction() isn't called as well
+        }
+        if (action.equals("+") || action.equals("-")) {
+            int selected = lvTrolley.getSelectionModel().getSelectedIndex();
+            int change = action.equals("+") ? 1 : -1;
+            int rowsBefore = lvTrolley.getItems().size();
+            cusController.doChangeQuantity(selected, change);
+            if (lvTrolley.getItems().size() == rowsBefore) {
+                lvTrolley.getSelectionModel().select(selected); // keep the same line selected, unless it was removed
+            }
+            return;
         }
         cusController.doAction(action);
     }
@@ -213,6 +236,6 @@ public class CustomerView  {
 
     WindowBounds getWindowBounds() {
         return new WindowBounds(viewWindow.getX(), viewWindow.getY(),
-                  viewWindow.getWidth(), viewWindow.getHeight());
+                viewWindow.getWidth(), viewWindow.getHeight());
     }
 }

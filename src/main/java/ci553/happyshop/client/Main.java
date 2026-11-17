@@ -66,10 +66,10 @@ public class Main extends Application {
         startEmergencyExit();
 
         // Note: You may temporarily comment out duplicate UIs to create more screen space,
-        // but the system should still correctly synchronise data across clients.
+        // but the system should still correctly synchronize data across clients.
     }
 
-    /** The customer GUI -search prodduct, add to trolley, cancel/submit trolley, view receipt.
+    /** The customer GUI -search product, add to trolley, cancel/submit trolley, view receipt.
      *
      * Responsible for setting up the MVC structure:
      * creates the Model, View, and Controller and links them together.
@@ -95,8 +95,7 @@ public class Main extends Application {
         cusModel.cusView = cusView;
         cusView.start(new Stage());
 
-        // Optional feature: Handling Stock Shortages at Checkout.
-        // Code is commented out for now; students may explore this as an extension.
+        // Creates the pop-up shown when products are removed at checkout because of low stock.
         RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
         removeProductNotifier.cusView = cusView;
         cusModel.removeProductNotifier = removeProductNotifier;
@@ -136,7 +135,7 @@ public class Main extends Application {
     }
 
 
-    /** The Warehouse GUI- for warehouse staff to manage stock;
+    /** The Warehouse GUI-for warehouse staff to manage stock;
      *
      * Initializes the Warehouse client's Model, View, and Controller,and links them together for communication.
      * It also creates the DatabaseRW instance via the DatabaseRWCreator and passed into the warehouse Model using constructor injection.
@@ -169,7 +168,7 @@ public class Main extends Application {
         alertSimulator.warehouseView = view;
     }
 
-    //starts the EmergencyExit GUI, - used to close the entire application immediatelly
+    //starts the EmergencyExit GUI, - used to close the entire application immediately
     private void startEmergencyExit(){
         EmergencyExit.getEmergencyExit();
     }

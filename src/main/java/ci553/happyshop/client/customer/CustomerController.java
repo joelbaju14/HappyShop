@@ -29,5 +29,12 @@ public class CustomerController {
     public void doRemove(int selectedIndex) {
         cusModel.removeFromTrolley(selectedIndex);
     }
-
+    /**
+     * Passes the selected trolley row and the change (+1 or -1) to the model.
+     * @param selectedIndex the row the customer clicked, or -1 if none
+     * @param change        +1 for the + button, -1 for the - button
+     */
+    public void doChangeQuantity(int selectedIndex, int change) {
+        cusModel.changeQuantity(selectedIndex, change);
+    }
 }

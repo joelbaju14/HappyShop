@@ -1,9 +1,18 @@
 package ci553.happyshop.catalogue;
 
 import java.util.Collections;
-
+/**
+ * A trolley that keeps one line per product (merging duplicates)
+ * and keeps the lines sorted by product ID.
+ */
 public class OrganizedTrolley extends Trolley {
 
+    /**
+     * Adds a product, merging it with an existing line if the ID matches,
+     * then sorts the trolley by product ID. Stores a copy of the product so
+     * changes to the search result can't affect the trolley.
+     * @param product the product to add
+     */
     @Override
     public void addProduct(Product product) {
 

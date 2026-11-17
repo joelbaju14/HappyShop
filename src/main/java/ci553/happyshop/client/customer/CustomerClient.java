@@ -42,8 +42,7 @@ public class CustomerClient extends Application {
         cusModel.cusView = cusView;
         cusView.start(window);
 
-        // Optional feature: Handling Stock Shortages at Checkout.
-        // Code is commented out for now; students may explore this as an extension.
+        // Creates the pop-up shown when products are removed at checkout because of low stock.
         RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
         removeProductNotifier.cusView = cusView;
         cusModel.removeProductNotifier = removeProductNotifier;
