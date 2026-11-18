@@ -48,8 +48,22 @@ public class CustomerModel {
     }
 
     //SELECT productID, description, image, unitPrice,inStock quantity
+
+    /**
+     * Reads the ID from the search box, then searches for it.
+     * Kept so the controller doesn't need to change.
+     */
     void search() {
-        String productId = cusView.tfId.getText().trim();
+        search(cusView.tfId.getText().trim());
+    }
+
+    /**
+     * Searches the database for a product by ID.
+     * Taking the ID as a parameter means this can be unit tested without a window.
+     *
+     * @param productId the ID typed by the customer
+     */
+    void search(String productId) {
         if (!productId.isEmpty()) {
             searchResult = databaseRW.searchProductById(productId); //search database
             if (searchResult != null && searchResult.getStockQuantity() > 0) {
