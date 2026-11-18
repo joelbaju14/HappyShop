@@ -14,6 +14,8 @@ import ci553.happyshop.storageAccess.DatabaseRW;
 import ci553.happyshop.storageAccess.DatabaseRWCreator;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import java.time.Clock;
+
 
 /**
  * The main JavaFX application class. This class can be executed directly
@@ -30,7 +32,10 @@ import javafx.stage.Stage;
  */
 
 public class Main extends Application {
-
+    // Warehouse staff login. Only the salt and PBKDF2 hash are stored, never the password.
+    private static final String STAFF_USERNAME = "staff";
+    private static final String STAFF_SALT = "7OdjAald7iv7dR5gjc/7wA==";
+    private static final String STAFF_HASH = "cfCUQLH2ZM2rQEIoNYSSsS17MPtPE1eKzzexrhc3cFA=";
     // If your IDE shows 'public' as redundant (greyed out),
    // see the explanation in the Launcher class.
     public static void main(String[] args) {
@@ -134,6 +139,24 @@ public class Main extends Application {
         orderHub.initializeOrderMap();
     }
 
+    /**
+     * Shows the staff login window first. The Warehouse client only opens
+     * after a successful login (3 failed attempts lock login for 3 minutes).
+     */
+    private void startWarehouseClient() {
+        LoginModel loginModel = new LoginModel(STAFF_USERNAME, STAFF_SALT, STAFF_HASH,
+                Clock.systemDefaultZone());
+        LoginView loginView = new LoginView();
+        LoginController loginController = new LoginController();
+
+        // Link the login MVC, and say what happens after a correct login
+        loginView.controller = loginController;
+        loginController.model = loginModel;
+        loginController.view = loginView;
+        loginController.onSuccess = this::openWarehouseClient;
+
+        loginView.start(new Stage());
+    }
 
     /** The Warehouse GUI-for warehouse staff to manage stock;
      *
@@ -145,7 +168,7 @@ public class Main extends Application {
      * which track the position of the Warehouse window and are triggered by the Model when needed.
      * These components are linked after launching the Warehouse interface.
      */
-    private void startWarehouseClient(){
+    private void openWarehouseClient(){
         DatabaseRW databaseRW = DatabaseRWCreator.createDatabaseRW();
         WarehouseView view = new WarehouseView();
         WarehouseController controller = new WarehouseController();
