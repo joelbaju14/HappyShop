@@ -78,7 +78,11 @@ public class LoginModel {
         return false;
     }
 
-    /** @return the message to show the user */
+    /**
+     * Gets the message to show the user after the last login attempt.
+     *
+     * @return the message, for example "Incorrect username or password. 2 attempt(s) left."
+     */
     String getMessage() {
         return message;
     }

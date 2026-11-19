@@ -213,9 +213,9 @@ public class SetDatabase {
      * typically used when you need a one-off implementation of a class or interface.
      * (Note: the object is the anonymous class's)
      *
-     * We did not use Files.walkFileTree(folder, new FileVisitor<>()) because FileVisitor is an interface, and we would need to implement
-     * all of its methods ourselves. Instead, we use Files.walkFileTree(folder, new SimpleFileVisitor<>()) because:
-     * - SimpleFileVisitor<> is an abstract class that implements the FileVisitor interface with default method implementations.
+     * We did not use Files.walkFileTree(folder, {@code new FileVisitor<>()}) because FileVisitor is an interface, and we would need to implement
+     * all of its methods ourselves. Instead, we use Files.walkFileTree(folder, {@code new SimpleFileVisitor<>()}) because:
+     * - {@code SimpleFileVisitor<>} is an abstract class that implements the FileVisitor interface with default method implementations.
      * - We only need to override the methods (visitFile, postVisitDirectory) that we're interested in, which simplifies our code.
      */
 
