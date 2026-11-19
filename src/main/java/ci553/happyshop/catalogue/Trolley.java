@@ -52,7 +52,7 @@ public class Trolley {
      * protected Trolley createTrolley() { return new Trolley(); }
      *
      * class OrganizedCustomerModel extends CustomerModel {
-     *     @Override
+     *    {@code @Override}
      *     protected Trolley createTrolley() {
      *         return new OrganizedTrolley();
      *     }

@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  *
  * <p> It is the central coordinator responsible for managing all orders. It handles:
  *   Creating and tracking orders
- *   Maintaining and updating the internal order map, <OrderId, OrderState>
+ *   Maintaining and updating the internal order map, {@code <OrderId, OrderState>}
  *   Delegating file-related operations (e.g., updating state and moving files) to OrderFileManager class
  *   Loading orders in the "ordered" and "progressing" states from storage during system startup
  *

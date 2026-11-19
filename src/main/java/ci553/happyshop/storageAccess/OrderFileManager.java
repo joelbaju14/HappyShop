@@ -33,7 +33,7 @@ import java.time.format.DateTimeFormatter;
  *  0002 TV      x1 (£999.99)
  *  Total price: £1002.99
  *  </pre>
- * </p>
+
  *
  * <p>
  * When the order state changes, this class updates the corresponding timestamp and moves the file to the appropriate folder.
